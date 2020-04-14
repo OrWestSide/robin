@@ -1,2 +1,6 @@
 # Virtual enviroment files
 venv
+
+# Cached files
+__pycache__
+.idea
