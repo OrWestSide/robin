@@ -1,4 +1,4 @@
-from general import start_up, setup_engine, setup_recognizer, _listen, \
+from src.general import start_up, setup_engine, setup_recognizer, _listen, \
     validate_response
 
 
