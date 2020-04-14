@@ -5,10 +5,14 @@ import pytz
 import os
 import speech_recognition as sr
 
-USERNAME = os.environ['USERNAME']
-RATE = int(os.environ['RATE'])
-VOLUME = float(os.environ['VOLUME'])
-TIMEZONE = os.environ['TIMEZONE']
+from dotenv import load_dotenv
+
+
+load_dotenv()
+USERNAME = os.getenv('_USERNAME')
+RATE = int(os.getenv('RATE'))
+VOLUME = float(os.getenv('VOLUME'))
+TIMEZONE = os.getenv('TIMEZONE')
 
 
 def setup_engine() -> pyttsx3.engine:

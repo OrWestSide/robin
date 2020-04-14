@@ -4,3 +4,6 @@ venv
 # Cached files
 __pycache__
 .idea
+
+# Enviromental variables
+.env
