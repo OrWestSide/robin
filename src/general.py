@@ -46,7 +46,7 @@ def start_up(_engine: pyttsx3.engine):
     _engine.runAndWait()
 
 
-def validate_response(response, recognizer, _engine):
+def validate_response(response, recognizer, _engine) -> str:
     while not response:
         response = _listen(recognizer, _engine)
     return response
