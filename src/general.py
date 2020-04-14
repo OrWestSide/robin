@@ -7,17 +7,15 @@ import speech_recognition as sr
 
 from dotenv import load_dotenv
 
-
 load_dotenv()
 USERNAME = os.getenv('_USERNAME')
 RATE = int(os.getenv('RATE'))
 VOLUME = float(os.getenv('VOLUME'))
 TIMEZONE = os.getenv('TIMEZONE')
 
-tired = ['tired', 'long']
+tired = ['tired', 'long', 'tiring']
 sad = ['not', 'bad']
-happy = ['ok', 'great']
-shutdown = ['shut', 'shutdown', 'shut down']
+happy = ['ok', 'great', 'fine']
 
 
 def setup_engine() -> pyttsx3.engine:
@@ -44,18 +42,19 @@ def start_up(_engine: pyttsx3.engine):
         greeting = 'Good evening '
 
     question = 'How are things going?' \
-        if random.random() > 0.5 else\
+        if random.random() > 0.5 else \
         'How are you today?'
 
-    _engine.say(greeting + USERNAME + '. ' + question)
-    _engine.runAndWait()
+    msg = greeting + USERNAME + '. ' + question
+    say(_engine, msg)
 
 
 def validate_response(response: str,
                       recognizer: sr.Recognizer,
-                      _engine: pyttsx3.engine) -> str:
+                      _engine: pyttsx3.engine,
+                      sleep: bool) -> str:
     while not response:
-        response = _listen(recognizer, _engine)
+        response = _listen(recognizer, _engine, sleep)
     return response
 
 
@@ -66,18 +65,20 @@ def reply_to_greeting_message(engine: pyttsx3.engine, response: str):
     elif any(_ in response for _ in happy):
         say(engine, 'This is good. ' + _need)
     elif any(_ in response for _ in sad):
-        say(engine, 'These are the days that you need to shine. ' + _need)
+        say(engine, 'These are the days you need to shine. ' + _need)
     else:
         say(engine, 'Some days I just do not understand you. Anyway. ' + _need)
 
 
-def _listen(r: sr.Recognizer, en: pyttsx3.engine):
+def _listen(r: sr.Recognizer, en: pyttsx3.engine, sleep: bool):
     with sr.Microphone() as source:
         audio = r.listen(source)
     try:
         query = r.recognize_google(audio, language='en')
     except sr.UnknownValueError:
-        say(en, 'I could not understand what you said. Do you want to repeat?')
+        if not sleep:
+            say(en, 'I could not understand what you said. Do you want to '
+                    'repeat?')
         return None
     return query
 

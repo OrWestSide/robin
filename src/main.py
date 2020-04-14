@@ -9,7 +9,16 @@ if __name__ == '__main__':
 
     # Start up Robin
     start_up(engine)
-    response = _listen(recognizer, engine)
-    response = validate_response(response, recognizer, engine).lower()
+    response = _listen(recognizer, engine, True)
+    response = validate_response(response, recognizer, engine, False).lower()
 
     reply_to_greeting_message(engine, response)
+
+    while True:
+        response = validate_response(_listen(recognizer, engine, True),
+                                     recognizer,
+                                     engine, True).lower()
+
+        print(response)
+        if 'robin' in response:
+            print('invoked')
