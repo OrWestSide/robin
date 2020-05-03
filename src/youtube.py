@@ -1,4 +1,5 @@
-import googleapiclient
+from general import init_youtube_client
+
 
 if __name__ == '__main__':
-    print(dir(googleapiclient))
+    youtube = init_youtube_client()

@@ -5,6 +5,7 @@ import pytz
 import os
 import speech_recognition as sr
 
+from apiclient import discovery
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,6 +13,7 @@ USERNAME = os.getenv('_USERNAME')
 RATE = int(os.getenv('RATE'))
 VOLUME = float(os.getenv('VOLUME'))
 TIMEZONE = os.getenv('TIMEZONE')
+API_KEY = os.getenv('GOOGLE_API_KEY')
 
 tired = ['tired', 'long', 'tiring']
 sad = ['not', 'bad']
@@ -81,6 +83,10 @@ def _listen(r: sr.Recognizer, en: pyttsx3.engine, sleep: bool):
                     'repeat?')
         return None
     return query
+
+
+def init_youtube_client():
+    return discovery.build('youtube', 'v3', developerKey=API_KEY)
 
 
 def say(_engine: pyttsx3.engine, saying: str):
