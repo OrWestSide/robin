@@ -17,11 +17,14 @@ def parse_response(resp):
 
 def play_song(_id):
     url = 'https://www.youtube.com/watch?v=' + str(_id)
+
+    print(url)
+
     video = pafy.new(url)
     best = video.getbest()
     play_url = best.url
 
-    instance = vlc.Instance()
+    instance = vlc.Instance('--verbose 9')
     player = instance.media_player_new()
     media = instance.media_new(play_url)
     media.get_mrl()
