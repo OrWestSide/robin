@@ -1,9 +1,20 @@
+import os
+import random
 import logging
 import multiprocessing
+
+from dotenv import load_dotenv
 
 from src.general import start_up, setup_engine, setup_recognizer, _listen, \
     validate_response, reply_to_greeting_message, init_youtube_client, say
 from src.youtube import make_query, parse_response, play_song
+
+load_dotenv()
+USERNAME = os.getenv('_USERNAME')
+names = ['robin', 'eloping', 'adobe', 'open']
+invocation_responses = [
+    'Tell me ' + USERNAME, 'What do you need?', 'Yes?', 'How can I help you?'
+]
 
 
 def setup():
@@ -47,8 +58,8 @@ if __name__ == '__main__':
         else:
             logging.info('Completed on idle cycle')
 
-        if 'robin' in response:
-            say(engine, 'Tell me Orestis')
+        if any(_ in response for _ in names):
+            say(engine, random.choice(invocation_responses))
             response = validate_response(_listen(recognizer, engine, True),
                                          recognizer,
                                          engine, True).lower()
@@ -57,6 +68,7 @@ if __name__ == '__main__':
             if 'play' in response:
                 res = make_query(youtube, response)
                 video_id = parse_response(res)
+
                 youtube_thread = multiprocessing.Process(
                     target=play_song, args=(video_id,)
                 )

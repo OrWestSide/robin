@@ -1,7 +1,8 @@
 import vlc
 import pafy
 import time
-import threading
+import logging
+import multiprocessing
 from general import init_youtube_client
 
 
@@ -19,6 +20,7 @@ def parse_response(resp):
 
 def play_song(_id):
     url = 'https://www.youtube.com/watch?v=' + str(_id)
+    logging.info('Video url: ' + url)
 
     video = pafy.new(url)
     best = video.getbest()
@@ -44,8 +46,14 @@ if __name__ == '__main__':
     res = make_query(youtube, q)
     video_id = parse_response(res)
 
+    youtube_process = None
     if video_id != '0':
-        youtube_process = threading.Thread(
+        youtube_process = multiprocessing.Process(
             target=play_song, args=(video_id,)
         )
         youtube_process.start()
+
+    q = input('Stop music? (y/n) ')
+
+    if q == 'y' and youtube_process is not None:
+        youtube_process.terminate()
