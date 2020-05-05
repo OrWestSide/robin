@@ -1,5 +1,6 @@
 import vlc
 import pafy
+import time
 from general import init_youtube_client
 
 
@@ -18,18 +19,20 @@ def parse_response(resp):
 def play_song(_id):
     url = 'https://www.youtube.com/watch?v=' + str(_id)
 
-    print(url)
-
     video = pafy.new(url)
     best = video.getbest()
     play_url = best.url
 
-    instance = vlc.Instance('--verbose 9')
+    instance = vlc.Instance()
     player = instance.media_player_new()
     media = instance.media_new(play_url)
     media.get_mrl()
     player.set_media(media)
     player.play()
+
+    time.sleep(1.5)
+    duration = player.get_length() / 1000
+    time.sleep(duration)
 
 
 if __name__ == '__main__':
