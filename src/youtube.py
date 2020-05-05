@@ -1,6 +1,7 @@
 import vlc
 import pafy
 import time
+import threading
 from general import init_youtube_client
 
 
@@ -44,4 +45,7 @@ if __name__ == '__main__':
     video_id = parse_response(res)
 
     if video_id != '0':
-        play_song(video_id)
+        youtube_process = threading.Thread(
+            target=play_song, args=(video_id,)
+        )
+        youtube_process.start()

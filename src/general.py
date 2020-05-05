@@ -1,4 +1,5 @@
 import pyttsx3
+import logging
 import datetime
 import random
 import pytz
@@ -56,7 +57,9 @@ def validate_response(response: str,
                       _engine: pyttsx3.engine,
                       sleep: bool) -> str:
     while not response:
+        logging.info('Could not understand. Re-listening')
         response = _listen(recognizer, _engine, sleep)
+    logging.info('Validated response is: ' + response)
     return response
 
 
@@ -90,5 +93,6 @@ def init_youtube_client():
 
 
 def say(_engine: pyttsx3.engine, saying: str):
+    logging.info('The message to say is: ' + saying)
     _engine.say(saying)
     _engine.runAndWait()
